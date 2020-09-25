@@ -22,7 +22,9 @@ class AppSettingsPlugin(): MethodCallHandler, FlutterPlugin, ActivityAware {
   /// Private method to open device settings window
   private fun openSettings(url: String) {
     try {
-      this.activity.startActivity(Intent(url))
+      val intent = Intent(url)
+      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT)
+      this.activity.startActivity(intent)
     } catch(e:Exception) {
       // Default to APP Settings if setting activity fails to load/be available on device
       openAppSettings()
@@ -31,7 +33,7 @@ class AppSettingsPlugin(): MethodCallHandler, FlutterPlugin, ActivityAware {
 
   private fun openAppSettings() {
     val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT)
     val uri = Uri.fromParts("package", this.activity.packageName, null)
     intent.data = uri
     this.activity.startActivity(intent)
